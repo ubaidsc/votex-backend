@@ -1,14 +1,15 @@
-const nodemailer = require('nodemailer');
-const logger = require('./logger');
+const nodemailer = require("nodemailer");
+const logger = require("./logger");
 
 class EmailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE,
+      host: "smtp.gmail.com", // Add host configuration
+      port: parseInt("587"), // Add port configuration
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      }
+        user: "ranaubaid409@gmail.com",
+        pass: "asrz bgkb vmah ltfl",
+      },
     });
   }
 
@@ -18,7 +19,7 @@ class EmailService {
       const mailOptions = {
         from: process.env.EMAIL_FROM,
         to: email,
-        subject: 'Voting System - Your Login Credentials',
+        subject: "Voting System - Your Login Credentials",
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
             <h2 style="color: #2563EB;">Secure Online Voting System</h2>
@@ -34,7 +35,7 @@ class EmailService {
             <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
             <p style="color: #6b7280; font-size: 14px;">If you have any questions, please contact the system administrator.</p>
           </div>
-        `
+        `,
       };
 
       const info = await this.transporter.sendMail(mailOptions);
@@ -42,7 +43,7 @@ class EmailService {
       return true;
     } catch (error) {
       logger.error(`Error sending voter credentials email: ${error.message}`);
-      throw new Error('Failed to send voter credentials email');
+      throw new Error("Failed to send voter credentials email");
     }
   }
 
@@ -50,7 +51,7 @@ class EmailService {
   async testConnection() {
     try {
       await this.transporter.verify();
-      logger.info('Email service is ready to send messages');
+      logger.info("Email service is ready to send messages");
       return true;
     } catch (error) {
       logger.error(`Email service connection error: ${error.message}`);
